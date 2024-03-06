@@ -33,7 +33,9 @@ export interface IOrderDetails {
 export interface IModalWindow {
 	type: IProductItem | IShoppingCart | IOrderDetails;
 
-	closeModal(): void
+	openModal(): void;
+
+	closeModal(): void;
 }
 
 
