@@ -21,22 +21,19 @@ export interface IShoppingCart {
 	deleteItem(cardInfo: IProductItem): void;
 }
 
-export interface IOrderDetails {
+export interface IOrderForm {
 	payment: string;
 	email: string;
 	phone: string;
 	address: string;
-	total: number | null;
+	total: number;
 	items: string[];
 }
 
-export interface IModalWindow {
-	type: IProductItem | IShoppingCart | IOrderDetails;
-
-	openModal(): void;
-
-	closeModal(): void;
+export interface ISuccess {
+	total: number;
 }
+
 
 
 
