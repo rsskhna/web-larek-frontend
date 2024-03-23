@@ -12,26 +12,20 @@ export interface IProductList {
 	items: IProductItem[];
 }
 
-export interface IShoppingCart {
-	items: IProductItem[];
-	totalPrice: number | null;
-
-	addItem(cardInfo: IProductItem): void;
-
-	deleteItem(cardInfo: IProductItem): void;
-}
-
 export interface IOrderForm {
 	payment: string;
 	email: string;
 	phone: string;
 	address: string;
 	total: number;
-	items: string[];
 }
 
-export interface ISuccess {
-	total: number;
+export interface IOrder extends IOrderForm {
+	items: IProductItem[]
+}
+
+export interface IOrderResult {
+	id: string;
 }
 
 
