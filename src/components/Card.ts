@@ -74,6 +74,7 @@ export class CardView extends Component<IProduct> {
 	}
 	get category(): string {
 		return this._category.textContent || '';
+
 	}
 }
 

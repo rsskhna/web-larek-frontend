@@ -14,6 +14,13 @@ export interface ICatalog {
 	items: IProduct[];
 }
 
+export interface IShoppingCart {
+	items: string[];
+	total: number;
+	addItem(cardInfo: IProduct): void;
+	deleteItem(cardInfo: IProduct): void;
+}
+
 export interface IAppState {
 	catalog: IProduct[];
 	shoppingCart: string[];

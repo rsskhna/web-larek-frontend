@@ -3,14 +3,12 @@ import { createElement, ensureElement } from '../../utils/utils';
 import { EventEmitter } from '../base/Events';
 import { IProduct } from '../../types';
 
-export interface IShoppingCart {
-	items: string[];
+export interface IShoppingCartView {
+	list: string[];
 	total: number;
-	addItem(cardInfo: IProduct): void;
-	deleteItem(cardInfo: IProduct): void;
 }
 
-export class ShoppingCartView extends Component<IShoppingCart> {
+export class ShoppingCartView extends Component<IShoppingCartView> {
 	protected _list: HTMLElement;
 	protected _total: HTMLElement;
 	protected _button: HTMLElement;
