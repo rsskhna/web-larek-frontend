@@ -1,5 +1,5 @@
 import { Component } from '../base/Component';
-import { IEvents } from '../base/events';
+import { IEvents } from '../base/Events';
 import { ensureElement } from '../../utils/utils';
 
 interface IFormState {
@@ -7,7 +7,7 @@ interface IFormState {
 	errors: string[];
 }
 
-export class Form<T> extends Component<IFormState> {
+export class FormView<T> extends Component<IFormState> {
 	protected _submit: HTMLButtonElement;
 	protected _errors: HTMLElement;
 

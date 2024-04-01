@@ -1,4 +1,6 @@
-export interface IProductItem {
+import { ApiListResponse } from '../components/base/Api';
+
+export interface IProduct {
 	id: string;
 	description: string;
 	image: string;
@@ -7,24 +9,34 @@ export interface IProductItem {
 	price: number | null;
 }
 
-export interface IProductList {
+export interface ICatalog {
 	total: number;
-	items: IProductItem[];
+	items: IProduct[];
 }
+
+export interface IAppState {
+	catalog: IProduct[];
+	shoppingCart: string[];
+	preview: string | null;
+	order: IOrder | null;
+	loading: boolean;
+}
+
+export type FormErrors = Partial<Record<keyof IOrder, string>>;
 
 export interface IOrderForm {
 	payment: string;
 	email: string;
 	phone: string;
 	address: string;
-	total: number;
 }
 
 export interface IOrder extends IOrderForm {
-	items: IProductItem[]
+	total: number;
+	items: string[];
 }
 
-export interface IOrderResult {
+export interface IOrderResult extends ApiListResponse<IProduct>{
 	id: string;
 }
 

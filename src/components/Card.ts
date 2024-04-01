@@ -1,12 +1,12 @@
 import { Component } from './base/Component';
-import { IProductItem } from '../types';
+import { IProduct } from '../types';
 import { ensureElement } from '../utils/utils';
 
 interface ICardActions {
 	onClick: (event: MouseEvent) => void;
 }
 
-export class Card extends Component<IProductItem> {
+export class CardView extends Component<IProduct> {
 	protected _title: HTMLElement;
 	protected _image?: HTMLImageElement;
 	protected _description?: HTMLElement;

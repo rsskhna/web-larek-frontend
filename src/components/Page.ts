@@ -1,5 +1,5 @@
 import { Component } from './base/Component';
-import { IEvents } from './base/events';
+import { IEvents } from './base/Events';
 import { ensureElement } from '../utils/utils';
 
 interface IPage {
@@ -8,11 +8,11 @@ interface IPage {
 	locked: boolean;
 }
 
-export class Page extends Component<IPage> {
+export class PageView extends Component<IPage> {
 	protected _counter: HTMLElement;
 	protected _catalog: HTMLElement;
 	protected _wrapper: HTMLElement;
-	protected _basket: HTMLElement;
+	protected _shoppingCart: HTMLElement;
 
 
 	constructor(container: HTMLElement, protected events: IEvents) {
@@ -21,9 +21,9 @@ export class Page extends Component<IPage> {
 		this._counter = ensureElement<HTMLElement>('.header__basket-counter');
 		this._catalog = ensureElement<HTMLElement>('.catalog__items');
 		this._wrapper = ensureElement<HTMLElement>('.page__wrapper');
-		this._basket = ensureElement<HTMLElement>('.header__basket');
+		this._shoppingCart = ensureElement<HTMLElement>('.header__basket');
 
-		this._basket.addEventListener('click', () => {
+		this._shoppingCart.addEventListener('click', () => {
 			this.events.emit('bids:open');
 		});
 	}

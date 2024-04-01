@@ -1,6 +1,3 @@
-import { IEvents } from './events';
-
-
 export abstract class Component<T> {
 	protected readonly container: HTMLElement;
 

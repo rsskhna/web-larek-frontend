@@ -1,14 +1,16 @@
 import { Component } from '../base/Component';
 import { createElement, ensureElement } from '../../utils/utils';
-import { EventEmitter } from '../base/events';
-import { IProductItem } from '../../types';
+import { EventEmitter } from '../base/Events';
+import { IProduct } from '../../types';
 
 export interface IShoppingCart {
-	items: IProductItem[];
-	totalPrice: number;
+	items: string[];
+	total: number;
+	addItem(cardInfo: IProduct): void;
+	deleteItem(cardInfo: IProduct): void;
 }
 
-export class ShoppingCart extends Component<IShoppingCart> {
+export class ShoppingCartView extends Component<IShoppingCart> {
 	protected _list: HTMLElement;
 	protected _total: HTMLElement;
 	protected _button: HTMLElement;
@@ -39,11 +41,7 @@ export class ShoppingCart extends Component<IShoppingCart> {
 		}
 	}
 
-	set total(total: number) {
+	set totalPrice(total: number) {
 		this.setText(this._total, total);
 	}
-
-	addItem(cardInfo: IProductItem): void {};
-
-	deleteItem(cardInfo: IProductItem): void {};
 }
