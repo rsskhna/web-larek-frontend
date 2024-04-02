@@ -1,9 +1,15 @@
 import { Component } from './base/Component';
 import { IProduct } from '../types';
-import { ensureElement } from '../utils/utils';
+import { bem, ensureElement } from '../utils/utils';
+import clsx from "clsx";
 
 interface ICardActions {
 	onClick: (event: MouseEvent) => void;
+}
+
+type CardCategory = {
+	category: string;
+	color: string
 }
 
 export class CardView extends Component<IProduct> {
@@ -69,14 +75,16 @@ export class CardView extends Component<IProduct> {
 		return this._description.textContent || '';
 	}
 
-	set category(value: string) {
-		this.setText(this._category, value);
-	}
-	get category(): string {
-		return this._category.textContent || '';
-
+	set category({ category, color }: CardCategory) {
+		this.setText(this._category, category);
+		this._category.className = clsx('card__category', {
+			[bem(this.blockName, 'category', 'soft').name]: color === 'soft',
+			[bem(this.blockName, 'category', 'hard').name]: color === 'hard',
+			[bem(this.blockName, 'category', 'other').name]: color === 'other',
+			[bem(this.blockName, 'category', 'additional').name]: color === 'additional',
+			[bem(this.blockName, 'category', 'button').name]: color === 'button'
+		});
 	}
 }
-
 
 
