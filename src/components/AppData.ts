@@ -2,6 +2,10 @@ import { Model } from './base/Model';
 import { FormErrors, IAppState, IOrder, IOrderForm, IProduct, ICatalog } from '../types';
 import { IShoppingCart } from '../types';
 
+export type CatalogChangeEvent= {
+	catalog: ProductModel[]
+}
+
 export class ProductModel extends Model<IProduct> {
 	id: string;
 	description: string;

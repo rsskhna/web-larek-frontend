@@ -7,11 +7,6 @@ interface ICardActions {
 	onClick: (event: MouseEvent) => void;
 }
 
-type CardCategory = {
-	category: string;
-	color: string
-}
-
 export class CardView extends Component<IProduct> {
 	protected _title: HTMLElement;
 	protected _image?: HTMLImageElement;
@@ -55,7 +50,11 @@ export class CardView extends Component<IProduct> {
 	}
 
 	set price(value: string) {
-		this.setText(this._price, value);
+		if (value === null) {
+			this.setText(this._price, 'Бесценно');
+		} else {
+			this.setText(this._price, `${value} синапсов`);
+		}
 	}
 	get price(): string {
 		return this._title.textContent || '';
@@ -75,15 +74,25 @@ export class CardView extends Component<IProduct> {
 		return this._description.textContent || '';
 	}
 
-	set category({ category, color }: CardCategory) {
-		this.setText(this._category, category);
-		this._category.className = clsx('card__category', {
-			[bem(this.blockName, 'category', 'soft').name]: color === 'soft',
-			[bem(this.blockName, 'category', 'hard').name]: color === 'hard',
-			[bem(this.blockName, 'category', 'other').name]: color === 'other',
-			[bem(this.blockName, 'category', 'additional').name]: color === 'additional',
-			[bem(this.blockName, 'category', 'button').name]: color === 'button'
-		});
+	set category(value: string) {
+		this.setText(this._category, value);
+		switch (value) {
+			case 'софт-скил':
+				this._category.classList.add('card__category_soft');
+				break;
+			case 'хард-скил':
+				this._category.classList.add('card__category_hard');
+				break;
+			case 'другое':
+				this._category.classList.add('card__category_other');
+				break;
+			case 'дополнительное':
+				this._category.classList.add('card__category_additional');
+				break;
+			case 'кнопка':
+				this._category.classList.add('card__category_button');
+				break;
+		}
 	}
 }
 
