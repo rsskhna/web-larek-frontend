@@ -39,7 +39,6 @@ events.on<CatalogChangeEvent>('items:changed', () => {
 			onClick: () => events.emit('card:select', item)
 		});
 		return card.render({
-			id: item.id,
 			description: item.description,
 			image: item.image,
 			title: item.title,
@@ -47,6 +46,41 @@ events.on<CatalogChangeEvent>('items:changed', () => {
 			price: item.price,
 		});
 	});
+
+	page.counter = appData.shoppingCart.length;
+});
+
+events.on('preview:changed', (item: ProductModel) => {
+	const showItem = (item: ProductModel) => {
+		const card = new CardView('card', cloneTemplate(cardPreviewTemplate));
+
+		modal.render({
+			content: card.render({
+				description: item.description,
+				image: item.image,
+				title: item.title,
+				category: item.category,
+				price: item.price,
+			})
+		});
+	}
+
+	if (item) {
+		api.getProductItem(item.id)
+			.then((result) => {
+				item.description = result.description;
+				showItem(item);
+			})
+			.catch((err) => {
+				console.error(err);
+			})
+	} else {
+		modal.close();
+	}
+});
+
+events.on('card:select', (item: ProductModel) => {
+	appData.setPreview(item);
 });
 
 events.on('modal:open', () => {
