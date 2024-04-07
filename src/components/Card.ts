@@ -95,5 +95,3 @@ export class CardView extends Component<IProduct> {
 		}
 	}
 }
-
-
