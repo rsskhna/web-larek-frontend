@@ -24,7 +24,7 @@ export class PageView extends Component<IPage> {
 		this._shoppingCart = ensureElement<HTMLElement>('.header__basket');
 
 		this._shoppingCart.addEventListener('click', () => {
-			this.events.emit('bids:open');
+			this.events.emit('cart:open');
 		});
 	}
 

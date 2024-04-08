@@ -110,7 +110,7 @@ export class ShoppingCartModel extends Model<IShoppingCart> {
 }
 
 export class AppState extends Model<IAppState> {
-	shoppingCart: string[];
+	shoppingCart: IProduct[];
 	catalog: IProduct[];
 	order: IOrder = {
 		payment: '',
@@ -125,6 +125,10 @@ export class AppState extends Model<IAppState> {
 
 	getTotal() {
 		return this.order.items.reduce((a, c) => a + this.catalog.find(it => it.id === c).price, 0);
+	}
+
+	getCartItems() {
+		return this.shoppingCart;
 	}
 
 	setCatalog(items: IProduct[]) {

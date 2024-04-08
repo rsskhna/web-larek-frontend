@@ -2,14 +2,15 @@ import './scss/styles.scss';
 import { EventEmitter } from './components/base/Events';
 import { LarekAPI } from './components/LarekApi';
 import { API_URL, CDN_URL } from './utils/constants';
-import { AppState, CatalogChangeEvent, CatalogModel, ProductModel } from './components/AppData';
+import { AppState, CatalogChangeEvent, CatalogModel, ProductModel, ShoppingCartModel } from './components/AppData';
 import { PageView } from './components/Page';
 import { ModalView } from './components/common/Modal';
-import { cloneTemplate, ensureElement } from './utils/utils';
+import { cloneTemplate, createElement, ensureElement } from './utils/utils';
 import { CardView } from './components/Card';
 import { SuccessView } from './components/common/Success';
 import { IOrderForm } from './types';
 import { OrderView } from './components/Order';
+import { ShoppingCartView } from './components/common/ShopppingCart';
 
 const events = new EventEmitter();
 const api = new LarekAPI(CDN_URL, API_URL);
@@ -31,6 +32,7 @@ const appData = new AppState({}, events);
 const page = new PageView(document.body, events);
 const modal = new ModalView(ensureElement<HTMLElement>('#modal-container'), events);
 
+const cart = new ShoppingCartView(cloneTemplate(shoppingCartTemplate), events);
 const order = new OrderView(cloneTemplate(orderTemplate), events);
 
 events.on<CatalogChangeEvent>('items:changed', () => {
@@ -79,8 +81,32 @@ events.on('preview:changed', (item: ProductModel) => {
 	}
 });
 
+events.on('cart:changed', () => {
+	page.counter = appData.shoppingCart.length;
+	cart.items = appData.getCartItems().map((item) => {
+		const cartItem = new CardView('card', cloneTemplate(cardCartTemplate), {
+			onClick: () => {
+				events.emit('card: delete', item);
+			},
+		});
+
+		return cartItem.render({
+			title: item.title,
+			price: item.price,
+		})
+	})
+	cart.totalPrice = appData.getTotal();
+});
+
 events.on('card:select', (item: ProductModel) => {
 	appData.setPreview(item);
+});
+
+events.on('cart:open', () => {
+	modal.render({
+		content:
+			cart.render(),
+	});
 });
 
 events.on('modal:open', () => {

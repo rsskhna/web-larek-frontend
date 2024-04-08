@@ -21,7 +21,7 @@ export class CardView extends Component<IProduct> {
 		this._title = ensureElement<HTMLElement>(`.${blockName}__title`, container);
 		this._image = ensureElement<HTMLImageElement>(`.${blockName}__image`, container);
 		this._button = container.querySelector(`.${blockName}__button`);
-		this._description = container.querySelector(`.${blockName}__description`);
+		this._description = container.querySelector(`.${blockName}__text`);
 		this._price = container.querySelector(`.${blockName}__price`);
 		this._category = container.querySelector(`.${blockName}__category`);
 
