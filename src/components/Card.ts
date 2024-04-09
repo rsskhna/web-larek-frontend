@@ -1,7 +1,7 @@
 import { Component } from './base/Component';
 import { IProduct } from '../types';
 import { bem, ensureElement } from '../utils/utils';
-import clsx from "clsx";
+import clsx from 'clsx';
 import * as events from 'events';
 
 interface ICardActions {
@@ -44,6 +44,7 @@ export class CardView extends Component<IProduct> {
 	set id(value: string) {
 		this.container.dataset.id = value;
 	}
+
 	get id(): string {
 		return this.container.dataset.id || '';
 	}
@@ -51,6 +52,7 @@ export class CardView extends Component<IProduct> {
 	set title(value: string) {
 		this.setText(this._title, value);
 	}
+
 	get title(): string {
 		return this._title.textContent || '';
 	}
@@ -62,6 +64,7 @@ export class CardView extends Component<IProduct> {
 			this.setText(this._price, `${value} синапсов`);
 		}
 	}
+
 	get price(): string {
 		return this._title.textContent || '';
 	}
@@ -69,13 +72,15 @@ export class CardView extends Component<IProduct> {
 	set image(value: string) {
 		this.setImage(this._image, value, this.title);
 	}
+
 	get image(): string {
 		return this._image.src || '';
 	}
 
 	set description(value: string) {
-			this.setText(this._description, value);
+		this.setText(this._description, value);
 	}
+
 	get description(): string {
 		return this._description.textContent || '';
 	}
