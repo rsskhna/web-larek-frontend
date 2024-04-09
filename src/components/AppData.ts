@@ -124,16 +124,21 @@ export class AppState extends Model<IAppState> {
 	formErrors: FormErrors = {};
 
 	getTotal() {
-		return this.order.items.reduce((a, c) => a + this.catalog.find(it => it.id === c).price, 0);
+		return this.shoppingCart.reduce((a, c) => a + this.catalog.find(it => it === c).price, 0);
 	}
 
 	getCartItems() {
 		return this.shoppingCart;
 	}
 
-	setCartItems(item: ProductModel) {
+	addItemToCart(item: ProductModel) {
 		this.shoppingCart.push(item);
 		this.emitChanges('cart:changed');
+	}
+
+	deleteItemFromCart(item: ProductModel) {
+		const index = this.shoppingCart.indexOf(item);
+		this.shoppingCart.splice(index, 1);
 	}
 
 	setCatalog(items: IProduct[]) {

@@ -15,6 +15,7 @@ export class CardView extends Component<IProduct> {
 	protected _button?: HTMLButtonElement;
 	protected _price: HTMLElement;
 	protected _category: HTMLElement;
+	protected _index?: HTMLElement;
 
 	constructor(protected blockName: string, container: HTMLElement, actions?: ICardActions) {
 		super(container);
@@ -25,7 +26,7 @@ export class CardView extends Component<IProduct> {
 		this._description = container.querySelector(`.${blockName}__text`);
 		this._price = container.querySelector(`.${blockName}__price`);
 		this._category = container.querySelector(`.${blockName}__category`);
-
+		this._index = container.querySelector('.basket__item-index');
 
 		if (actions?.onClick) {
 			if (this._button) {
@@ -34,6 +35,10 @@ export class CardView extends Component<IProduct> {
 				container.addEventListener('click', actions.onClick);
 			}
 		}
+	}
+
+	setIndex(value: number) {
+		this.setText(this._index, value);
 	}
 
 	set id(value: string) {

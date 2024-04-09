@@ -40,6 +40,6 @@ export class ShoppingCartView extends Component<IShoppingCartView> {
 	}
 
 	set totalPrice(total: number) {
-		this.setText(this._total, total);
+		this.setText(this._total, `${total} синапсов`);
 	}
 }

@@ -10,7 +10,7 @@ import { CardView } from './components/Card';
 import { SuccessView } from './components/common/Success';
 import { IOrderForm, IProduct } from './types';
 import { OrderView } from './components/Order';
-import { ShoppingCartView } from './components/common/ShopppingCart';
+import { ShoppingCartView } from './components/common/ShoppingCart';
 
 const events = new EventEmitter();
 const api = new LarekAPI(CDN_URL, API_URL);
@@ -85,18 +85,16 @@ events.on('preview:changed', (item: ProductModel) => {
 	}
 });
 
-events.on('card:add', (item: ProductModel) => {
-	appData.setCartItems(item);
-})
-
 events.on('cart:changed', () => {
 	page.counter = appData.shoppingCart.length;
-	cart.items = appData.getCartItems().map((item) => {
+	cart.items = appData.getCartItems().map((item, index) => {
 		const cartItem = new CardView('card', cloneTemplate(cardCartTemplate), {
 			onClick: () => {
 				events.emit('card:delete', item);
 			},
 		});
+
+		cartItem.setIndex(index+1);
 
 		return cartItem.render({
 			title: item.title,
@@ -105,6 +103,16 @@ events.on('cart:changed', () => {
 	})
 	cart.totalPrice = appData.getTotal();
 });
+
+events.on('card:add', (item: ProductModel) => {
+	appData.addItemToCart(item);
+	modal.close();
+})
+
+events.on('card:delete', (item: ProductModel) => {
+	appData.deleteItemFromCart(item);
+	events.emit('cart:changed');
+})
 
 events.on('card:select', (item: ProductModel) => {
 	appData.setPreview(item);
