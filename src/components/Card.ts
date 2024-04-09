@@ -2,6 +2,7 @@ import { Component } from './base/Component';
 import { IProduct } from '../types';
 import { bem, ensureElement } from '../utils/utils';
 import clsx from "clsx";
+import * as events from 'events';
 
 interface ICardActions {
 	onClick: (event: MouseEvent) => void;
@@ -19,7 +20,7 @@ export class CardView extends Component<IProduct> {
 		super(container);
 
 		this._title = ensureElement<HTMLElement>(`.${blockName}__title`, container);
-		this._image = ensureElement<HTMLImageElement>(`.${blockName}__image`, container);
+		this._image = container.querySelector<HTMLImageElement>(`.${blockName}__image`);
 		this._button = container.querySelector(`.${blockName}__button`);
 		this._description = container.querySelector(`.${blockName}__text`);
 		this._price = container.querySelector(`.${blockName}__price`);

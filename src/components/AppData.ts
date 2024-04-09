@@ -110,7 +110,7 @@ export class ShoppingCartModel extends Model<IShoppingCart> {
 }
 
 export class AppState extends Model<IAppState> {
-	shoppingCart: IProduct[];
+	shoppingCart: IProduct[] = [];
 	catalog: IProduct[];
 	order: IOrder = {
 		payment: '',
@@ -129,6 +129,11 @@ export class AppState extends Model<IAppState> {
 
 	getCartItems() {
 		return this.shoppingCart;
+	}
+
+	setCartItems(item: ProductModel) {
+		this.shoppingCart.push(item);
+		this.emitChanges('cart:changed');
 	}
 
 	setCatalog(items: IProduct[]) {

@@ -8,7 +8,7 @@ import { ModalView } from './components/common/Modal';
 import { cloneTemplate, createElement, ensureElement } from './utils/utils';
 import { CardView } from './components/Card';
 import { SuccessView } from './components/common/Success';
-import { IOrderForm } from './types';
+import { IOrderForm, IProduct } from './types';
 import { OrderView } from './components/Order';
 import { ShoppingCartView } from './components/common/ShopppingCart';
 
@@ -54,7 +54,11 @@ events.on<CatalogChangeEvent>('items:changed', () => {
 
 events.on('preview:changed', (item: ProductModel) => {
 	const showItem = (item: ProductModel) => {
-		const card = new CardView('card', cloneTemplate(cardPreviewTemplate));
+		const card = new CardView('card', cloneTemplate(cardPreviewTemplate), {
+			onClick: () => {
+				events.emit('card:add', item);
+			}
+		});
 
 		modal.render({
 			content: card.render({
@@ -81,12 +85,16 @@ events.on('preview:changed', (item: ProductModel) => {
 	}
 });
 
+events.on('card:add', (item: ProductModel) => {
+	appData.setCartItems(item);
+})
+
 events.on('cart:changed', () => {
 	page.counter = appData.shoppingCart.length;
 	cart.items = appData.getCartItems().map((item) => {
 		const cartItem = new CardView('card', cloneTemplate(cardCartTemplate), {
 			onClick: () => {
-				events.emit('card: delete', item);
+				events.emit('card:delete', item);
 			},
 		});
 
