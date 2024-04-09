@@ -34,6 +34,7 @@ const modal = new ModalView(ensureElement<HTMLElement>('#modal-container'), even
 
 const cart = new ShoppingCartView(cloneTemplate(shoppingCartTemplate), events);
 const order = new OrderView(cloneTemplate(orderTemplate), events);
+const form = new OrderView(cloneTemplate(formTemplate), events);
 
 events.on<CatalogChangeEvent>('items:changed', () => {
 	page.catalog = appData.catalog.map(item => {
@@ -102,6 +103,40 @@ events.on('cart:changed', () => {
 		})
 	})
 	cart.totalPrice = appData.getTotal();
+});
+
+events.on('formErrors:change', (errors: Partial<IOrderForm>) => {
+	const { email, phone , address, payment} = errors;
+	order.valid =  !address && !payment;
+	form.valid = !email && !phone;
+	order.errors = Object.values({address, payment}).filter(i => !!i).join('; ');
+	form.errors = Object.values({phone, email}).filter(i => !!i).join('; ');
+});
+
+events.on(/^order\..*:change/, (data: { field: keyof IOrderForm, value: string }) => {
+	appData.setOrderField(data.field, data.value);
+});
+
+events.on('order:open', () => {
+	modal.render({
+		content: order.render({
+			payment: '',
+			address: '',
+			valid: false,
+			errors: []
+		})
+	});
+});
+
+events.on('form:open', () => {
+	modal.render({
+		content: form.render({
+			phone: '',
+			email: '',
+			valid: false,
+			errors: []
+		})
+	});
 });
 
 events.on('card:add', (item: ProductModel) => {

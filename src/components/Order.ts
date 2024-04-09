@@ -9,16 +9,25 @@ export type ButtonActions = {
 
 export class OrderView extends FormView<IOrderForm> {
 	protected _buttons: HTMLButtonElement[];
+	protected _nextButton: HTMLButtonElement;
 
 	constructor(container: HTMLFormElement, events: IEvents, actions?: ButtonActions) {
 		super(container, events);
 		this._buttons = ensureAllElements<HTMLButtonElement>('.button_alt', container);
+		this._nextButton = container.querySelector('.order__button');
 
 		this._buttons.forEach(button => {
 			button.addEventListener('click', () => {
 				actions?.onClick?.(button.name);
+				this.payment = button.name
 			});
 		})
+
+		if (this._nextButton) {
+			this._nextButton.addEventListener('click', () => {
+				events.emit('form:open');
+			});
+		}
 	}
 
 	set phone(value: string) {
@@ -36,7 +45,8 @@ export class OrderView extends FormView<IOrderForm> {
 	set payment(name: string) {
 		this._buttons.forEach(button => {
 			this.toggleClass(button, 'button_alt-active', button.name === name);
-			this.setDisabled(button, button.name === name)
 		});
 	}
 }
+
+
