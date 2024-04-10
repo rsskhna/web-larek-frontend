@@ -181,11 +181,11 @@ events.on('form:open', () => {
 events.on('contacts:submit', () => {
 	api.orderProducts(appData.order)
 		.then(res => {
+			appData.clearCart();
+			events.emit('cart:changed');
 			const success = new SuccessView(cloneTemplate(successTemplate), {
 				onClick: () => {
-					appData.clearCart();
 					modal.close()
-					events.emit('cart:changed');
 				}
 			});
 
