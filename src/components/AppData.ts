@@ -142,7 +142,7 @@ export class AppState extends Model<IAppState> {
 	}
 
 	clearCart() {
-		this.shoppingCart.length = 0;
+		this.shoppingCart = [];
 	}
 
 	setCatalog(items: IProduct[]) {
@@ -163,7 +163,7 @@ export class AppState extends Model<IAppState> {
 		}
 	}
 
-	setTotalOrder () {
+	setOrderTotal () {
 		this.order.total = this.getTotal();
 	}
 
