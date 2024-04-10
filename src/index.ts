@@ -153,10 +153,6 @@ events.on('formErrors:change', (errors: Partial<IOrderForm>) => {
 });
 
 events.on('order:open', () => {
-	appData.setOrderTotal();
-	appData.setOrderItems();
-	console.log(appData.order);
-
 	modal.render({
 		content: order.render({
 			payment: 'card',
@@ -179,6 +175,9 @@ events.on('form:open', () => {
 });
 
 events.on('contacts:submit', () => {
+	appData.setOrderTotal();
+	appData.setOrderItems();
+
 	api.orderProducts(appData.order)
 		.then(res => {
 			appData.clearOrder();
