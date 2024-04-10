@@ -106,4 +106,9 @@ export class CardView extends Component<IProduct> {
 				break;
 		}
 	}
+
+	render(data?: Partial<IProduct>, containsInCart?: boolean): HTMLElement {
+		this.setDisabled(this._button, containsInCart);
+		return super.render(data);
+	}
 }

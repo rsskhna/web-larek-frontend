@@ -62,13 +62,16 @@ events.on('preview:changed', (item: ProductModel) => {
 		});
 
 		modal.render({
-			content: card.render({
-				description: item.description,
-				image: item.image,
-				title: item.title,
-				category: item.category,
-				price: item.price,
-			})
+			content: card.render(
+				{
+					description: item.description,
+					image: item.image,
+					title: item.title,
+					category: item.category,
+					price: item.price,
+				},
+				appData.getCartItems().includes(item)
+			)
 		});
 	}
 
@@ -89,15 +92,15 @@ events.on('preview:changed', (item: ProductModel) => {
 events.on('cart:changed', () => {
 	page.counter = appData.shoppingCart.length;
 	cart.items = appData.getCartItems().map((item, index) => {
-		const cartItem = new CardView('card', cloneTemplate(cardCartTemplate), {
+		const card = new CardView('card', cloneTemplate(cardCartTemplate), {
 			onClick: () => {
 				events.emit('card:delete', item);
 			},
 		});
 
-		cartItem.setIndex(index+1);
+		card.setIndex(index+1);
 
-		return cartItem.render({
+		return card.render({
 			title: item.title,
 			price: item.price,
 		})
@@ -120,7 +123,7 @@ events.on(/^order\..*:change/, (data: { field: keyof IOrderForm, value: string }
 events.on('order:open', () => {
 	modal.render({
 		content: order.render({
-			payment: '',
+			payment: 'card',
 			address: '',
 			valid: false,
 			errors: []
