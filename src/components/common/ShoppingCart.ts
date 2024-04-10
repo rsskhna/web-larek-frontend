@@ -1,7 +1,6 @@
 import { Component } from '../base/Component';
 import { createElement, ensureElement } from '../../utils/utils';
 import { EventEmitter } from '../base/Events';
-import { IProduct } from '../../types';
 
 export interface IShoppingCartView {
 	list: string[];

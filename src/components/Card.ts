@@ -1,8 +1,7 @@
 import { Component } from './base/Component';
 import { IProduct } from '../types';
-import { bem, ensureElement } from '../utils/utils';
-import clsx from 'clsx';
-import * as events from 'events';
+import { ensureElement } from '../utils/utils';
+
 
 interface ICardActions {
 	onClick: (event: MouseEvent) => void;

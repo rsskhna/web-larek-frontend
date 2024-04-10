@@ -5,17 +5,14 @@ import { API_URL, CDN_URL } from './utils/constants';
 import {
 	AppState,
 	CatalogChangeEvent,
-	CatalogModel,
 	ProductModel,
-	ShoppingCartModel,
-	UserDataModel,
 } from './components/AppData';
 import { PageView } from './components/Page';
 import { ModalView } from './components/common/Modal';
-import { cloneTemplate, createElement, ensureElement } from './utils/utils';
+import { cloneTemplate, ensureElement } from './utils/utils';
 import { CardView } from './components/Card';
 import { SuccessView } from './components/common/Success';
-import { IOrderForm, IProduct } from './types';
+import { IOrderForm } from './types';
 import { OrderView } from './components/Order';
 import { ShoppingCartView } from './components/common/ShoppingCart';
 
