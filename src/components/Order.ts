@@ -19,7 +19,7 @@ export class OrderView extends FormView<IOrderForm> {
 		this._buttons.forEach(button => {
 			button.addEventListener('click', () => {
 				actions?.onClick?.(button.name);
-				this.payment = button.name
+				this.payment = button.name;
 			});
 		})
 

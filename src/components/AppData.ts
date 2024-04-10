@@ -141,6 +141,10 @@ export class AppState extends Model<IAppState> {
 		this.shoppingCart.splice(index, 1);
 	}
 
+	clearCart() {
+		this.shoppingCart.length = 0;
+	}
+
 	setCatalog(items: IProduct[]) {
 		this.catalog = items.map(item => new ProductModel(item, this.events));
 		this.emitChanges('items:changed', { catalog: this.catalog });
@@ -157,6 +161,16 @@ export class AppState extends Model<IAppState> {
 		if (this.validateOrder()) {
 			this.events.emit('order:ready', this.order);
 		}
+	}
+
+	setTotalOrder () {
+		this.order.total = this.getTotal();
+	}
+
+	setOrderItems () {
+		this.shoppingCart.forEach(product => {
+			this.order.items.push(product.id);
+		})
 	}
 
 	validateOrder() {

@@ -2,7 +2,14 @@ import './scss/styles.scss';
 import { EventEmitter } from './components/base/Events';
 import { LarekAPI } from './components/LarekApi';
 import { API_URL, CDN_URL } from './utils/constants';
-import { AppState, CatalogChangeEvent, CatalogModel, ProductModel, ShoppingCartModel } from './components/AppData';
+import {
+	AppState,
+	CatalogChangeEvent,
+	CatalogModel,
+	ProductModel,
+	ShoppingCartModel,
+	UserDataModel,
+} from './components/AppData';
 import { PageView } from './components/Page';
 import { ModalView } from './components/common/Modal';
 import { cloneTemplate, createElement, ensureElement } from './utils/utils';
@@ -24,8 +31,8 @@ const cardPreviewTemplate = ensureElement<HTMLTemplateElement>('#card-preview');
 const cardCartTemplate = ensureElement<HTMLTemplateElement>('#card-basket');
 const shoppingCartTemplate = ensureElement<HTMLTemplateElement>('#basket');
 const orderTemplate = ensureElement<HTMLTemplateElement>('#order');
-const successTemplate = ensureElement<HTMLTemplateElement>('#success');
 const formTemplate = ensureElement<HTMLTemplateElement>('#contacts');
+const successTemplate = ensureElement<HTMLTemplateElement>('#success');
 
 const appData = new AppState({}, events);
 
@@ -89,6 +96,10 @@ events.on('preview:changed', (item: ProductModel) => {
 	}
 });
 
+events.on('card:select', (item: ProductModel) => {
+	appData.setPreview(item);
+});
+
 events.on('cart:changed', () => {
 	page.counter = appData.shoppingCart.length;
 	cart.items = appData.getCartItems().map((item, index) => {
@@ -108,16 +119,37 @@ events.on('cart:changed', () => {
 	cart.totalPrice = appData.getTotal();
 });
 
+events.on('cart:open', () => {
+	modal.render({
+		content:
+			cart.render(),
+	});
+});
+
+events.on('card:add', (item: ProductModel) => {
+	appData.addItemToCart(item);
+	modal.close();
+})
+
+events.on('card:delete', (item: ProductModel) => {
+	appData.deleteItemFromCart(item);
+	events.emit('cart:changed');
+})
+
+events.on(/^order\..*:change/, (data: { field: keyof IOrderForm, value: string }) => {
+	appData.setOrderField(data.field, data.value);
+});
+
+events.on(/^contacts\..*:change/, (data: { field: keyof IOrderForm, value: string }) => {
+	appData.setOrderField(data.field, data.value);
+});
+
 events.on('formErrors:change', (errors: Partial<IOrderForm>) => {
 	const { email, phone , address, payment} = errors;
 	order.valid =  !address && !payment;
 	form.valid = !email && !phone;
 	order.errors = Object.values({address, payment}).filter(i => !!i).join('; ');
 	form.errors = Object.values({phone, email}).filter(i => !!i).join('; ');
-});
-
-events.on(/^order\..*:change/, (data: { field: keyof IOrderForm, value: string }) => {
-	appData.setOrderField(data.field, data.value);
 });
 
 events.on('order:open', () => {
@@ -142,24 +174,23 @@ events.on('form:open', () => {
 	});
 });
 
-events.on('card:add', (item: ProductModel) => {
-	appData.addItemToCart(item);
-	modal.close();
-})
-
-events.on('card:delete', (item: ProductModel) => {
-	appData.deleteItemFromCart(item);
-	events.emit('cart:changed');
-})
-
-events.on('card:select', (item: ProductModel) => {
-	appData.setPreview(item);
-});
-
-events.on('cart:open', () => {
+events.on('contacts:submit', () => {
+	appData.setTotalOrder();
+	appData.setOrderItems();
+	console.log(appData.order)
+	api.orderProducts(appData.order)
+		.then(res => {
+			success.total = res.total;
+		})
+	const success = new SuccessView(cloneTemplate(successTemplate), {
+		onClick: () => {
+			appData.clearCart();
+			modal.close()
+		}
+	});
 	modal.render({
 		content:
-			cart.render(),
+			success.render(),
 	});
 });
 
