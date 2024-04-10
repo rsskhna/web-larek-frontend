@@ -34,16 +34,19 @@ const successTemplate = ensureElement<HTMLTemplateElement>('#success');
 const appData = new AppState({}, events);
 
 const page = new PageView(document.body, events);
-const modal = new ModalView(ensureElement<HTMLElement>('#modal-container'), events);
+const modal = new ModalView(
+	ensureElement<HTMLElement>('#modal-container'),
+	events
+);
 
 const cart = new ShoppingCartView(cloneTemplate(shoppingCartTemplate), events);
 const order = new OrderView(cloneTemplate(orderTemplate), events);
 const form = new OrderView(cloneTemplate(formTemplate), events);
 
 events.on<CatalogChangeEvent>('items:changed', () => {
-	page.catalog = appData.catalog.map(item => {
+	page.catalog = appData.catalog.map((item) => {
 		const card = new CardView('card', cloneTemplate(cardCatalogTemplate), {
-			onClick: () => events.emit('card:select', item)
+			onClick: () => events.emit('card:select', item),
 		});
 		return card.render({
 			description: item.description,
@@ -62,7 +65,7 @@ events.on('preview:changed', (item: ProductModel) => {
 		const card = new CardView('card', cloneTemplate(cardPreviewTemplate), {
 			onClick: () => {
 				events.emit('card:add', item);
-			}
+			},
 		});
 
 		modal.render({
@@ -75,19 +78,20 @@ events.on('preview:changed', (item: ProductModel) => {
 					price: item.price,
 				},
 				appData.getCartItems().includes(item)
-			)
+			),
 		});
-	}
+	};
 
 	if (item) {
-		api.getProductItem(item.id)
+		api
+			.getProductItem(item.id)
 			.then((result) => {
 				item.description = result.description;
 				showItem(item);
 			})
 			.catch((err) => {
 				console.error(err);
-			})
+			});
 	} else {
 		modal.close();
 	}
@@ -106,47 +110,56 @@ events.on('cart:changed', () => {
 			},
 		});
 
-		card.setIndex(index+1);
+		card.setIndex(index + 1);
 
 		return card.render({
 			title: item.title,
 			price: item.price,
-		})
-	})
+		});
+	});
 	cart.totalPrice = appData.getTotal();
 });
 
 events.on('cart:open', () => {
 	modal.render({
-		content:
-			cart.render(),
+		content: cart.render(),
 	});
 });
 
 events.on('card:add', (item: ProductModel) => {
 	appData.addItemToCart(item);
 	modal.close();
-})
+});
 
 events.on('card:delete', (item: ProductModel) => {
 	appData.deleteItemFromCart(item);
 	events.emit('cart:changed');
-})
-
-events.on(/^order\..*:change/, (data: { field: keyof IOrderForm, value: string }) => {
-	appData.setOrderField(data.field, data.value);
 });
 
-events.on(/^contacts\..*:change/, (data: { field: keyof IOrderForm, value: string }) => {
-	appData.setOrderField(data.field, data.value);
-});
+events.on(
+	/^order\..*:change/,
+	(data: { field: keyof IOrderForm; value: string }) => {
+		appData.setOrderField(data.field, data.value);
+	}
+);
+
+events.on(
+	/^contacts\..*:change/,
+	(data: { field: keyof IOrderForm; value: string }) => {
+		appData.setOrderField(data.field, data.value);
+	}
+);
 
 events.on('formErrors:change', (errors: Partial<IOrderForm>) => {
-	const { email, phone , address, payment} = errors;
-	order.valid =  !address && !payment;
+	const { email, phone, address, payment } = errors;
+	order.valid = !address && !payment;
 	form.valid = !email && !phone;
-	order.errors = Object.values({address, payment}).filter(i => !!i).join('; ');
-	form.errors = Object.values({phone, email}).filter(i => !!i).join('; ');
+	order.errors = Object.values({ address, payment })
+		.filter((i) => !!i)
+		.join('; ');
+	form.errors = Object.values({ phone, email })
+		.filter((i) => !!i)
+		.join('; ');
 });
 
 events.on('order:open', () => {
@@ -155,8 +168,8 @@ events.on('order:open', () => {
 			payment: 'card',
 			address: '',
 			valid: false,
-			errors: []
-		})
+			errors: [],
+		}),
 	});
 });
 
@@ -166,8 +179,8 @@ events.on('form:open', () => {
 			phone: '',
 			email: '',
 			valid: false,
-			errors: []
-		})
+			errors: [],
+		}),
 	});
 });
 
@@ -175,25 +188,25 @@ events.on('contacts:submit', () => {
 	appData.setOrderTotal();
 	appData.setOrderItems();
 
-	api.orderProducts(appData.order)
-		.then(res => {
+	api
+		.orderProducts(appData.order)
+		.then((res) => {
 			appData.clearOrder();
 			appData.clearCart();
 			events.emit('cart:changed');
 			const success = new SuccessView(cloneTemplate(successTemplate), {
 				onClick: () => {
-					modal.close()
-				}
+					modal.close();
+				},
 			});
 
 			success.total = res.total;
 
 			modal.render({
-				content:
-					success.render(),
+				content: success.render(),
 			});
 		})
-		.catch(err => {
+		.catch((err) => {
 			console.error(err);
 		});
 });
@@ -206,10 +219,9 @@ events.on('modal:close', () => {
 	page.locked = false;
 });
 
-api.getProductList()
+api
+	.getProductList()
 	.then(appData.setCatalog.bind(appData))
-	.catch(err => {
+	.catch((err) => {
 		console.error(err);
 	});
-
-

@@ -1,10 +1,17 @@
 import { Model } from './base/Model';
-import { FormErrors, IAppState, IOrder, IOrderForm, IProduct, ICatalog } from '../types';
+import {
+	FormErrors,
+	IAppState,
+	IOrder,
+	IOrderForm,
+	IProduct,
+	ICatalog,
+} from '../types';
 import { IShoppingCart } from '../types';
 
-export type CatalogChangeEvent= {
-	catalog: ProductModel[]
-}
+export type CatalogChangeEvent = {
+	catalog: ProductModel[];
+};
 
 export class ProductModel extends Model<IProduct> {
 	id: string;
@@ -99,14 +106,14 @@ export class ShoppingCartModel extends Model<IShoppingCart> {
 
 	addItem(cardInfo: IProduct): void {
 		this.items.push(cardInfo.id);
-	};
+	}
 
 	deleteItem(cardInfo: IProduct): void {
 		if (this.items) {
 			const index = this.items.indexOf(cardInfo.id);
 			this.items.splice(index, 1);
 		}
-	};
+	}
 }
 
 export class AppState extends Model<IAppState> {
@@ -124,7 +131,10 @@ export class AppState extends Model<IAppState> {
 	formErrors: FormErrors = {};
 
 	getTotal() {
-		return this.shoppingCart.reduce((a, c) => a + this.catalog.find(it => it === c).price, 0);
+		return this.shoppingCart.reduce(
+			(a, c) => a + this.catalog.find((it) => it === c).price,
+			0
+		);
 	}
 
 	getCartItems() {
@@ -150,7 +160,7 @@ export class AppState extends Model<IAppState> {
 	}
 
 	setCatalog(items: IProduct[]) {
-		this.catalog = items.map(item => new ProductModel(item, this.events));
+		this.catalog = items.map((item) => new ProductModel(item, this.events));
 		this.emitChanges('items:changed', { catalog: this.catalog });
 	}
 
@@ -167,15 +177,15 @@ export class AppState extends Model<IAppState> {
 		}
 	}
 
-	setOrderTotal () {
+	setOrderTotal() {
 		this.order.total = this.getTotal();
 	}
 
-	setOrderItems () {
+	setOrderItems() {
 		if (this.shoppingCart) {
-			this.shoppingCart.forEach(product => {
+			this.shoppingCart.forEach((product) => {
 				this.order.items.push(product.id);
-			})
+			});
 		}
 	}
 

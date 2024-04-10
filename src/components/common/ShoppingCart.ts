@@ -33,9 +33,11 @@ export class ShoppingCartView extends Component<IShoppingCartView> {
 			this._list.replaceChildren(...items);
 			this._button.removeAttribute('disabled');
 		} else {
-			this._list.replaceChildren(createElement<HTMLParagraphElement>('p', {
-				textContent: 'Корзина пуста',
-			}));
+			this._list.replaceChildren(
+				createElement<HTMLParagraphElement>('p', {
+					textContent: 'Корзина пуста',
+				})
+			);
 			this._button.setAttribute('disabled', '');
 		}
 	}

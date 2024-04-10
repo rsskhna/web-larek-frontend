@@ -1,6 +1,6 @@
-import {Component} from "../base/Component";
-import {ensureElement} from "../../utils/utils";
-import {IEvents} from "../base/Events";
+import { Component } from '../base/Component';
+import { ensureElement } from '../../utils/utils';
+import { IEvents } from '../base/Events';
 
 interface IModalData {
 	content: HTMLElement;
@@ -13,7 +13,10 @@ export class ModalView extends Component<IModalData> {
 	constructor(container: HTMLElement, protected events: IEvents) {
 		super(container);
 
-		this._closeButton = ensureElement<HTMLButtonElement>('.modal__close', container);
+		this._closeButton = ensureElement<HTMLButtonElement>(
+			'.modal__close',
+			container
+		);
 		this._content = ensureElement<HTMLElement>('.modal__content', container);
 
 		this._closeButton.addEventListener('click', this.close.bind(this));

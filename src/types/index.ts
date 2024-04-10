@@ -43,10 +43,6 @@ export interface IOrder extends IOrderForm {
 	items: string[];
 }
 
-export interface IOrderResult extends ApiListResponse<IProduct>{
+export interface IOrderResult extends ApiListResponse<IProduct> {
 	id: string;
 }
-
-
-
-

@@ -2,7 +2,6 @@ import { Component } from './base/Component';
 import { IProduct } from '../types';
 import { ensureElement } from '../utils/utils';
 
-
 interface ICardActions {
 	onClick: (event: MouseEvent) => void;
 }
@@ -16,11 +15,17 @@ export class CardView extends Component<IProduct> {
 	protected _category: HTMLElement;
 	protected _index?: HTMLElement;
 
-	constructor(protected blockName: string, container: HTMLElement, actions?: ICardActions) {
+	constructor(
+		protected blockName: string,
+		container: HTMLElement,
+		actions?: ICardActions
+	) {
 		super(container);
 
 		this._title = ensureElement<HTMLElement>(`.${blockName}__title`, container);
-		this._image = container.querySelector<HTMLImageElement>(`.${blockName}__image`);
+		this._image = container.querySelector<HTMLImageElement>(
+			`.${blockName}__image`
+		);
 		this._button = container.querySelector(`.${blockName}__button`);
 		this._description = container.querySelector(`.${blockName}__text`);
 		this._price = container.querySelector(`.${blockName}__price`);

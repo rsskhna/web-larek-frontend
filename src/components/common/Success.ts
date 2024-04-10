@@ -17,7 +17,10 @@ export class SuccessView extends Component<ISuccess> {
 	constructor(container: HTMLElement, actions: ISuccessActions) {
 		super(container);
 
-		this._close = ensureElement<HTMLElement>('.order-success__close', this.container);
+		this._close = ensureElement<HTMLElement>(
+			'.order-success__close',
+			this.container
+		);
 		this._total = container.querySelector('.order-success__description');
 
 		if (actions?.onClick) {

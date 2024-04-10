@@ -14,7 +14,6 @@ export class PageView extends Component<IPage> {
 	protected _wrapper: HTMLElement;
 	protected _shoppingCart: HTMLElement;
 
-
 	constructor(container: HTMLElement, protected events: IEvents) {
 		super(container);
 

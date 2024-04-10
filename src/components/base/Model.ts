@@ -5,8 +5,8 @@ export const isModel = (obj: unknown): obj is Model<any> => {
 };
 
 export abstract class Model<T> {
-	public data: Partial<T>
-	protected events: IEvents
+	public data: Partial<T>;
+	protected events: IEvents;
 
 	constructor(data: Partial<T>, events: IEvents) {
 		this.data = data;
