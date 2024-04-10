@@ -113,7 +113,7 @@ export class AppState extends Model<IAppState> {
 	shoppingCart: IProduct[] = [];
 	catalog: IProduct[];
 	order: IOrder = {
-		payment: '',
+		payment: 'card',
 		email: '',
 		phone: '',
 		address: '',
@@ -145,6 +145,10 @@ export class AppState extends Model<IAppState> {
 		this.shoppingCart = [];
 	}
 
+	clearOrder() {
+		this.order.items = [];
+	}
+
 	setCatalog(items: IProduct[]) {
 		this.catalog = items.map(item => new ProductModel(item, this.events));
 		this.emitChanges('items:changed', { catalog: this.catalog });
@@ -168,9 +172,11 @@ export class AppState extends Model<IAppState> {
 	}
 
 	setOrderItems () {
-		this.shoppingCart.forEach(product => {
-			this.order.items.push(product.id);
-		})
+		if (this.shoppingCart) {
+			this.shoppingCart.forEach(product => {
+				this.order.items.push(product.id);
+			})
+		}
 	}
 
 	validateOrder() {
