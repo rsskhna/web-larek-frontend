@@ -36,7 +36,7 @@ const appData = new AppState({}, events);
 const page = new PageView(document.body, events);
 const modal = new ModalView(
 	ensureElement<HTMLElement>('#modal-container'),
-	events
+	events,
 );
 
 const cart = new ShoppingCartView(cloneTemplate(shoppingCartTemplate), events);
@@ -77,24 +77,12 @@ events.on('preview:changed', (item: ProductModel) => {
 					category: item.category,
 					price: item.price,
 				},
-				appData.getCartItems().includes(item)
+				appData.getCartItems().includes(item),
 			),
 		});
 	};
 
-	if (item) {
-		api
-			.getProductItem(item.id)
-			.then((result) => {
-				item.description = result.description;
-				showItem(item);
-			})
-			.catch((err) => {
-				console.error(err);
-			});
-	} else {
-		modal.close();
-	}
+	showItem(item);
 });
 
 events.on('card:select', (item: ProductModel) => {
@@ -140,14 +128,14 @@ events.on(
 	/^order\..*:change/,
 	(data: { field: keyof IOrderForm; value: string }) => {
 		appData.setOrderField(data.field, data.value);
-	}
+	},
 );
 
 events.on(
 	/^contacts\..*:change/,
 	(data: { field: keyof IOrderForm; value: string }) => {
 		appData.setOrderField(data.field, data.value);
-	}
+	},
 );
 
 events.on('formErrors:change', (errors: Partial<IOrderForm>) => {

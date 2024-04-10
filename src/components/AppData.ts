@@ -156,6 +156,9 @@ export class AppState extends Model<IAppState> {
 	}
 
 	clearOrder() {
+		this.order.phone = '';
+		this.order.address = '';
+		this.order.email = '';
 		this.order.items = [];
 	}
 
